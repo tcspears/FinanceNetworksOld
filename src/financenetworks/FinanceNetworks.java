@@ -1,31 +1,34 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2019 Taylor C. Spears (University of Edinburgh).
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package financenetworks;
 
-import edu.stanford.nlp.ie.AbstractSequenceClassifier;
-import edu.stanford.nlp.ie.crf.*;
-import edu.stanford.nlp.io.IOUtils;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.sequences.DocumentReaderAndWriter;
-import edu.stanford.nlp.util.CoreMap;
-import edu.stanford.nlp.util.Triple;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import java.util.List;
-import java.util.TreeMap;
+import java.util.LinkedHashSet;
 
 /**
  *
- * @author taylor
+ * @author Taylor Spears (University of Edinburgh)
  */
 public class FinanceNetworks {
 
@@ -37,56 +40,15 @@ public class FinanceNetworks {
     public static void main(String[] args) throws Exception 
     {
         
-        
-        MoveEntry test = new MoveEntry("This is a test", LocalDate.parse("2016-01-01"));
-        test.addPerson("John Smith");
-        test.addPerson("Frank Bull");
-        
-        MoveEntry test1 = new MoveEntry("This is a test", LocalDate.parse("2016-01-01"));
-        test1.addPerson("John Smith");
-        
-        System.out.println(test.matchingPeople(test1));
-        
-        
-       /**
-        
-        String serializedClassifier = "classifiers/english.all.3class.distsim.crf.ser.gz";
-        AbstractSequenceClassifier<CoreLabel> classifier = CRFClassifier.getClassifier(serializedClassifier);
-        
+        StanfordClassifier classifier = new StanfordClassifier();
+        TextReader reader = new TextReader(classifier);
+
         String inputFile = "/Users/taylor/Downloads/output/file_2.txt";
-        BufferedReader inputReader = new BufferedReader(new FileReader(inputFile));
         
-        LinkedHashMap<String, List> fileData = new LinkedHashMap<>();
-        
-        String line = inputReader.readLine();
-        
-        while(line != null)
-        {
-            fileData.put(line, classifier.classifyToCharacterOffsets(line));
-            line = inputReader.readLine();
-        }
+        LinkedHashSet fileOutput = reader.classifyTextFile(inputFile);
         
         System.out.println("Classification done");
-        
-        for(String key : fileData.keySet())
-        {
-            System.out.println(key + "|");
-            List data = fileData.get(key);
-            
-            if(!data.isEmpty())
-            {
-                for (Object triple : data) 
-                {
-                    Triple trip = (Triple) triple;
-                    System.out.println("Type:" + trip.first + "|" + key.substring((Integer) trip.second, (Integer) trip.third));
-                }
-                
-            }
-        }
-        * 
-        * 
-        
-        */
+
 
     }
     
