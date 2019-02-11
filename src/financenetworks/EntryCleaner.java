@@ -4,6 +4,7 @@
 
 package financenetworks;
 
+import static java.lang.Integer.min;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -13,6 +14,8 @@ import java.util.LinkedHashSet;
  */
 public class EntryCleaner {
     
+    // entry begins with a pronoun
+    
     private static boolean beginsWithPronoun (MoveEntry entry)
     {
         String entryText = entry.getEntryText();
@@ -21,12 +24,48 @@ public class EntryCleaner {
         return firstWord.equals("she") || firstWord.equals("he");
     }
     
+    // first and second entry have entities in common (name/org only)
+    
     private static boolean haveEntitiesInCommon (MoveEntry firstEntry, MoveEntry secondEntry)
     {
         boolean matchingPeople = firstEntry.matchingPeopleExist(secondEntry);
         boolean matchingOrgs = firstEntry.matchingOrganizationsExist(secondEntry);
         
         return matchingPeople || matchingOrgs;
+    }
+    
+    // Check to see if the end of the first entry includes a period, and
+    // if the start of the second entry includes an uppercase letter. If both
+    // are not true, then the entries should be combined.
+    
+    private static boolean endStartPunctuationCheck (MoveEntry firstEntry, MoveEntry secondEntry)
+    {
+        int lastCharacterPosition = firstEntry.getEntryText().length() - 1;
+        boolean doesNotEndWithPeriod = !firstEntry.getEntryText().substring(lastCharacterPosition).equals('.');
+        
+        String firstCharacterAsCapital = secondEntry.getEntryText().substring(0, 0).toUpperCase();
+        boolean doesNotStartWithCapital = !secondEntry.getEntryText().substring(0, 0).equals(firstCharacterAsCapital);
+        
+        return doesNotEndWithPeriod && doesNotStartWithCapital;
+    }
+    
+    // If the entry contains the word 'joins' in the first five words of the entryText, it probably needs to be 
+    // combined with the previous entry.
+    
+    private static boolean startsWithJoins (MoveEntry entry)
+    {
+        String[] entryTextSplit = entry.getEntryText().split("\\s+");
+        
+        int subStringLength = min(entryTextSplit.length, 5);
+        
+        for(int i = 0; i < subStringLength; i++)
+        {
+            if(entryTextSplit[i].equals("joins")){
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     
@@ -43,7 +82,9 @@ public class EntryCleaner {
             MoveEntry current = iter.next();
             boolean commonEntities = haveEntitiesInCommon(previous, current);
             boolean pronoun = beginsWithPronoun(current);
-            boolean shouldCombineWithPrev = commonEntities || pronoun;
+            boolean punctuation = endStartPunctuationCheck(previous, current);
+            boolean joins = startsWithJoins(current);
+            boolean shouldCombineWithPrev = commonEntities || pronoun || punctuation || joins;
             
             if(shouldCombineWithPrev)
             {
