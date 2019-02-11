@@ -1,25 +1,5 @@
 /*
- * The MIT License
- *
  * Copyright 2019 Taylor C. Spears (University of Edinburgh).
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
  */
 
 package financenetworks;
@@ -85,10 +65,6 @@ public class MoveEntry {
     
     public boolean matchingPeopleExist(MoveEntry entry)
     {
-        //HashSet<Person> matching = new HashSet<>(people);
-        //matching.retainAll(entry.people);
-        //return matching.size() > 0;
-                
         // we must check if this's values contains entry's values (and not other
         // way around because full names are always used first in entries).
         
@@ -108,14 +84,9 @@ public class MoveEntry {
     }
     
     public boolean matchingOrganizationsExist(MoveEntry entry)
-    {
-        //HashSet<Organization> matching = new HashSet<>(organizations);
-        //matching.retainAll(entry.organizations);
-        //return matching.size() > 0;
-        
+    {   
         // we must check if this's values contains entry's values (and not other
         // way around because full names are always used first in entries).
-        
         
         for(Organization inputOrg : entry.organizations){
             
@@ -133,10 +104,6 @@ public class MoveEntry {
     
     public boolean matchingLocationsExist(MoveEntry entry)
     {
-        //HashSet<Location> matching = new HashSet<>(locations);
-        //matching.retainAll(entry.locations);
-        //return matching.size() > 0;
-        
         // we must check if this's values contains entry's values (and not other
         // way around because full names are always used first in entries).
         
@@ -178,19 +145,10 @@ public class MoveEntry {
         
         this.entryText = this.entryText + entry.getEntryText();
         
-        //HashSet<Person> newPeople = new HashSet<>(people);
-        //newPeople.addAll(entry.people);
         people.addAll(entry.people);
-        
-        //HashSet<Organization> newOrganizations = new HashSet<>(organizations);
-        //newOrganizations.addAll(entry.organizations);
         organizations.addAll(entry.organizations);
-        
-        //HashSet<Location> newLocations = new HashSet<>(locations);
-        //newLocations.addAll(entry.locations);
         locations.addAll(entry.locations);
         
-        //return new MoveEntry(newEntryText, date, newPeople, newOrganizations, newLocations);
     }
     
     public HashSet<? extends Entity> getAllEntities()

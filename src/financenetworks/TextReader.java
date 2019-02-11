@@ -1,35 +1,23 @@
 /*
- * The MIT License
- *
  * Copyright 2019 Taylor C. Spears (University of Edinburgh).
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
  */
 
 package financenetworks;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -39,15 +27,54 @@ public class TextReader {
     
     protected final TextClassifier classifier;
     
+    protected final DateTimeFormatter dateFormat;
+    
     public TextReader (TextClassifier classifier)
     {
         this.classifier = classifier;
+        
+        dateFormat = new DateTimeFormatterBuilder()
+        .appendPattern("MMM yyyy")
+        .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+        .toFormatter();
+    }
+    
+    public LocalDate dateFromMonYear (String monYear)
+    {        
+        return LocalDate.parse(monYear, dateFormat);
+    }
+    
+    public String extractTextSection (String fileContent)
+    {
+        // Regex to match <text> tags; save to fileText string
+        final Pattern textPattern = Pattern.compile("<text>(.+?)</text>", Pattern.DOTALL);
+        final Matcher textMatcher = textPattern.matcher(fileContent);
+        textMatcher.find();
+        
+        return textMatcher.group(1);
+    }
+    
+    public LocalDate extractDate (String fileContent)
+    {
+        // Regex to match docdate tags; save to dateText string and convert to a localDate
+        final Pattern datePattern = Pattern.compile("<attr name=\"docdate\">(.+?)</attr>", Pattern.DOTALL);
+        final Matcher dateMatcher = datePattern.matcher(fileContent);
+        dateMatcher.find();
+        
+        String dateText = dateMatcher.group(1);
+        return dateFromMonYear(dateText);
     }
     
     public LinkedHashSet classifyTextFile (String fileLocation) throws FileNotFoundException, IOException
     {
         
-        BufferedReader inputReader = new BufferedReader(new FileReader(fileLocation));
+        // Read file contents into String
+        String fileContent = new String (Files.readAllBytes(Paths.get(fileLocation)));
+        String fileText = extractTextSection(fileContent);
+        fileText = StringUtils.stripAccents(fileText);
+        LocalDate date = extractDate(fileContent);
+        
+        BufferedReader inputReader = new BufferedReader(new StringReader(fileText));
         
         LinkedHashSet<MoveEntry> fileData = new LinkedHashSet<>();
         
@@ -57,7 +84,7 @@ public class TextReader {
         {
             
             // need to add functionality to extract dates
-            MoveEntry entry = classifier.classifyText(line, LocalDate.parse("2018-01-01"));
+            MoveEntry entry = classifier.classifyText(line, date);
             
             int numEntities = entry.getAllEntities().size();
             
