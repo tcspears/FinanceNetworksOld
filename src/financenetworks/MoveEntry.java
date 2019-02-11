@@ -34,7 +34,7 @@ import java.util.TreeMap;
  */
 public class MoveEntry {
     
-    private final String entryText;
+    private String entryText;
     protected HashSet<Person> people;
     protected HashSet<Organization> organizations;
     protected HashSet<Location> locations;
@@ -85,20 +85,73 @@ public class MoveEntry {
     
     public boolean matchingPeopleExist(MoveEntry entry)
     {
-        HashSet<Person> matching = new HashSet<>(people);
-        return matching.retainAll(entry.people);
+        //HashSet<Person> matching = new HashSet<>(people);
+        //matching.retainAll(entry.people);
+        //return matching.size() > 0;
+                
+        // we must check if this's values contains entry's values (and not other
+        // way around because full names are always used first in entries).
+        
+        for(Person inputPerson : entry.people)
+        {
+            for(Person person : people)
+            {
+                if(person.name.toLowerCase().contains(inputPerson.name.toLowerCase())){
+                    return true;
+                }
+
+            }
+            
+        }
+        
+        return false;
     }
     
     public boolean matchingOrganizationsExist(MoveEntry entry)
     {
-        HashSet<Organization> matching = new HashSet<>(organizations);
-        return matching.retainAll(entry.organizations);
+        //HashSet<Organization> matching = new HashSet<>(organizations);
+        //matching.retainAll(entry.organizations);
+        //return matching.size() > 0;
+        
+        // we must check if this's values contains entry's values (and not other
+        // way around because full names are always used first in entries).
+        
+        
+        for(Organization inputOrg : entry.organizations){
+            
+            for(Organization org : organizations){
+                
+                if(org.name.toLowerCase().contains(inputOrg.name.toLowerCase())){
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+        
     }
     
     public boolean matchingLocationsExist(MoveEntry entry)
     {
-        HashSet<Location> matching = new HashSet<>(locations);
-        return matching.retainAll(entry.locations);
+        //HashSet<Location> matching = new HashSet<>(locations);
+        //matching.retainAll(entry.locations);
+        //return matching.size() > 0;
+        
+        // we must check if this's values contains entry's values (and not other
+        // way around because full names are always used first in entries).
+        
+        for(Location inputLoc : entry.locations){
+            
+            for(Location loc : locations){
+                
+                if(loc.name.toLowerCase().contains(inputLoc.name.toLowerCase())){
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+        
     }
     
     public void addPerson (String personName)
@@ -116,25 +169,28 @@ public class MoveEntry {
         locations.add(new Location(locationName));
     }
     
-    public MoveEntry mergeWithEntry (MoveEntry entry) throws Exception
+    public void mergeWithEntry (MoveEntry entry) throws Exception
     {
         if(!date.equals(entry.getDate()))
         {
             throw new Exception();
         }
         
-        String newEntryText = this.entryText + entry.getEntryText();
+        this.entryText = this.entryText + entry.getEntryText();
         
-        HashSet<Person> newPeople = new HashSet<>(people);
-        newPeople.addAll(entry.people);
+        //HashSet<Person> newPeople = new HashSet<>(people);
+        //newPeople.addAll(entry.people);
+        people.addAll(entry.people);
         
-        HashSet<Organization> newOrganizations = new HashSet<>(organizations);
-        newOrganizations.addAll(entry.organizations);
+        //HashSet<Organization> newOrganizations = new HashSet<>(organizations);
+        //newOrganizations.addAll(entry.organizations);
+        organizations.addAll(entry.organizations);
         
-        HashSet<Location> newLocations = new HashSet<>(locations);
-        newLocations.addAll(entry.locations);
+        //HashSet<Location> newLocations = new HashSet<>(locations);
+        //newLocations.addAll(entry.locations);
+        locations.addAll(entry.locations);
         
-        return new MoveEntry(newEntryText, date, newPeople, newOrganizations, newLocations);
+        //return new MoveEntry(newEntryText, date, newPeople, newOrganizations, newLocations);
     }
     
     public HashSet<? extends Entity> getAllEntities()
