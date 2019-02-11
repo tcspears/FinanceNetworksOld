@@ -1,0 +1,7 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Copyright 2019 Taylor C. Spears (University of Edinburgh)
+<#if licenseLast??>
+${licenseLast}
+</#if>
