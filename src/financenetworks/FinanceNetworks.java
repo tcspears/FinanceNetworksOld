@@ -24,7 +24,12 @@
 
 package financenetworks;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 
 /**
  *
@@ -39,15 +44,62 @@ public class FinanceNetworks {
 
     public static void main(String[] args) throws Exception 
     {
-        
+       
         StanfordClassifier classifier = new StanfordClassifier();
         TextReader reader = new TextReader(classifier);
+        
+        File dir = new File("/Users/taylor/Downloads/output");
+        FileFilter fileFilter = new RegexFileFilter("file_[0-9][0-9]*\\.xml");
+        File[] files = dir.listFiles(fileFilter);
 
-        String inputFile = "/Users/taylor/Downloads/output/file_2.txt";
+        ArrayList<LinkedHashSet<MoveEntry>> fileData = new ArrayList<>();
         
-        LinkedHashSet fileOutput = reader.classifyTextFile(inputFile);
+        for(File file : files)
+        {
+            LinkedHashSet fileOutput = reader.classifyTextFile(file.getAbsolutePath());
+            EntryCleaner.cleanEntries(fileOutput);
+            fileData.add(fileOutput);
+        }
         
-        System.out.println("Classification done");
+        for(LinkedHashSet dataSet : fileData)
+        {
+            
+            for (Iterator it = dataSet.iterator(); it.hasNext();) {
+                MoveEntry entry = (MoveEntry) it.next();
+                
+                System.out.println("=========================================================================");
+                System.out.println("DATE: " + entry.getDate().toString());
+                System.out.println("");
+                System.out.println("ENTRY TEXT:");
+                System.out.println(entry.getEntryText());
+                System.out.println("");
+                System.out.println("PEOPLE:");
+                
+                for(Person person : entry.people){
+                    System.out.println(person.name);
+                }
+                
+                System.out.println("");
+                
+                System.out.println("ORGANIZATIONS:");
+                
+                for(Organization org : entry.organizations){
+                    System.out.println(org.name);
+                }
+                
+                System.out.println("");
+                
+                System.out.println("LOCATIONS:");
+                
+                for(Location loc : entry.locations){
+                    System.out.println(loc.name);
+                }
+                
+                System.out.println("");
+            }
+            
+            
+        }
 
 
     }
