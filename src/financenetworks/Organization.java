@@ -14,6 +14,11 @@ public class Organization extends Entity
     {
         super(name);
     }   
+    
+    public Organization (String name, String leftNeighborhood, String rightNeighborhood)
+    {
+        super(name, leftNeighborhood, rightNeighborhood);
+    }
 
     @Override
     public String getEntityType() 

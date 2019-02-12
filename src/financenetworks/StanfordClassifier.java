@@ -36,25 +36,36 @@ public class StanfordClassifier extends TextClassifier {
         
         MoveEntry entry = new MoveEntry(inputText, textDate);
         
+        String leftNeighborhood;
+        String rightNeighborhood;
+        String entityName;
+        
         for (Object triple : classified) 
         {
             Triple trip = (Triple) triple;
+            
+            entityName = inputText.substring((Integer) trip.second, (Integer) trip.third);
+            leftNeighborhood = buildLeftNeighborhood(inputText, (int) trip.second);
+            rightNeighborhood = buildRightNeighborhood(inputText, (int) trip.third);
            
             switch((String) trip.first)
             {
                 case "PERSON": 
                     
-                    entry.addPerson(inputText.substring((Integer) trip.second, (Integer) trip.third));
+                    Person person = new Person(entityName, leftNeighborhood, rightNeighborhood);
+                    entry.addPerson(person);
                     break;
                 
                 case "ORGANIZATION":
                     
-                    entry.addOrganization(inputText.substring((Integer) trip.second, (Integer) trip.third));
+                    Organization org = new Organization(entityName, leftNeighborhood, rightNeighborhood);
+                    entry.addOrganization(org);
                     break;
                     
                 case "LOCATION":
                     
-                    entry.addLocation(inputText.substring((Integer) trip.second, (Integer) trip.third));
+                    Location location = new Location(entityName, leftNeighborhood, rightNeighborhood);
+                    entry.addLocation(location);
                     break;
             }
             

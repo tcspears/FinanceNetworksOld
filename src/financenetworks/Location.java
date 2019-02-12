@@ -14,6 +14,11 @@ public class Location extends Entity
     {
         super(name);
     }   
+    
+    public Location (String name, String leftNeighborhood, String rightNeighborhood)
+    {
+        super(name, leftNeighborhood, rightNeighborhood);
+    }
 
     @Override
     public String getEntityType() 

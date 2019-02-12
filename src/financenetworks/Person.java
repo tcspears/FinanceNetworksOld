@@ -14,6 +14,11 @@ public class Person extends Entity
     {
         super(name);
     }   
+    
+    public Person (String name, String leftNeighborhood, String rightNeighborhood)
+    {
+        super(name, leftNeighborhood, rightNeighborhood);
+    }
 
     @Override
     public String getEntityType() 

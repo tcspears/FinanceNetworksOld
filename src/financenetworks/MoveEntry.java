@@ -121,19 +121,19 @@ public class MoveEntry {
         
     }
     
-    public void addPerson (String personName)
+    public void addPerson (Person person)
     {
-        people.add(new Person(personName));
+        people.add(person);
     }
     
-    public void addOrganization (String orgName)
+    public void addOrganization (Organization org)
     {
-        organizations.add(new Organization(orgName));
+        organizations.add(org);
     }
     
-    public void addLocation (String locationName)
+    public void addLocation (Location location)
     {
-        locations.add(new Location(locationName));
+        locations.add(location);
     }
     
     public void mergeWithEntry (MoveEntry entry) throws Exception
