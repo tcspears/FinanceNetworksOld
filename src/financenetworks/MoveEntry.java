@@ -88,11 +88,14 @@ public class MoveEntry {
         // we must check if this's values contains entry's values (and not other
         // way around because full names are always used first in entries).
         
-        for(Organization inputOrg : entry.organizations){
+        for(Organization inputOrg : entry.organizations)
+        {
             
-            for(Organization org : organizations){
+            for(Organization org : organizations)
+            {
                 
-                if(org.name.toLowerCase().contains(inputOrg.name.toLowerCase())){
+                if(org.name.toLowerCase().contains(inputOrg.name.toLowerCase()))
+                {
                     return true;
                 }
             }
@@ -107,11 +110,14 @@ public class MoveEntry {
         // we must check if this's values contains entry's values (and not other
         // way around because full names are always used first in entries).
         
-        for(Location inputLoc : entry.locations){
+        for(Location inputLoc : entry.locations)
+        {
             
-            for(Location loc : locations){
+            for(Location loc : locations)
+            {
                 
-                if(loc.name.toLowerCase().contains(inputLoc.name.toLowerCase())){
+                if(loc.name.toLowerCase().contains(inputLoc.name.toLowerCase()))
+                {
                     return true;
                 }
             }
@@ -148,6 +154,9 @@ public class MoveEntry {
         people.addAll(entry.people);
         organizations.addAll(entry.organizations);
         locations.addAll(entry.locations);
+        
+        // todo: add functionality to update position number of entities, and 
+        // re-define the left/right neighborhoods upon merging. 
         
     }
     

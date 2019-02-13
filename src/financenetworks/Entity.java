@@ -16,6 +16,9 @@ public abstract class Entity
     public final String leftNeighborhood;
     public final String rightNeighborhood;
     
+    // Todo: add position values to Entity class, and develop methods to update
+    // position values when entries are merged.
+    
     public Entity (String name)
     {
         this.name = name;
@@ -63,7 +66,11 @@ public abstract class Entity
         
         Entity c = (Entity) o;
         
-        return this.name.equals(c.name);
+        boolean nameMatches = this.name.equals(c.name);
+        boolean leftNMatches = this.leftNeighborhood.equals(c.leftNeighborhood);
+        boolean rightNMatches = this.rightNeighborhood.equals(c.rightNeighborhood);
+        
+        return nameMatches && leftNMatches && rightNMatches;
         
     }
 
@@ -71,7 +78,7 @@ public abstract class Entity
     public int hashCode() 
     {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.name) + Objects.hashCode(this.leftNeighborhood) + Objects.hashCode(this.rightNeighborhood);
         return hash;
     }
     
