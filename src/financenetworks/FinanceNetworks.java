@@ -56,7 +56,7 @@ public class FinanceNetworks {
                 System.out.println("PEOPLE:");
                 
                 for(Person person : entry.people){
-                    System.out.println(person.name + " (" + person.leftNeighborhood + "," + person.rightNeighborhood + ")");
+                    System.out.println(person.name + " (\"" + person.leftNeighborhood + "\", \"" + person.rightNeighborhood + "\")");
                 }
                 
                 System.out.println("");
@@ -64,7 +64,7 @@ public class FinanceNetworks {
                 System.out.println("ORGANIZATIONS:");
                 
                 for(Organization org : entry.organizations){
-                    System.out.println(org.name + " (" + org.leftNeighborhood + "," + org.rightNeighborhood + ")");
+                    System.out.println(org.name + " (\"" + org.leftNeighborhood + "\", \"" + org.rightNeighborhood + "\")");
                 }
                 
                 System.out.println("");
@@ -72,7 +72,7 @@ public class FinanceNetworks {
                 System.out.println("LOCATIONS:");
                 
                 for(Location loc : entry.locations){
-                    System.out.println(loc.name + " (" + loc.leftNeighborhood + "," + loc.rightNeighborhood + ")");
+                    System.out.println(loc.name + " (\"" + loc.leftNeighborhood + "\", \"" + loc.rightNeighborhood + "\")");
                 }
                 
                 System.out.println("");
